@@ -1,0 +1,83 @@
+
+create table tbl_user
+(
+	u_id int PRIMARY KEY AUTO_INCREMENT,
+    username varchar(60) not null UNIQUE,
+    email varchar(60) not null UNIQUE,
+    userpass varchar(255) not null,
+    role varchar(20) not null,
+    created_at datetime not null DEFAULT CURRENT_TIMESTAMP
+
+)
+
+
+CREATE TABLE tbl_citizen (
+    c_id INT PRIMARY KEY AUTO_INCREMENT,
+    f_name VARCHAR(60) NOT NULL,
+    l_name VARCHAR(60) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    u_id_fk INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_citizen_user
+        FOREIGN KEY (u_id_fk)
+        REFERENCES tbl_user(u_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
+ 
+
+
+CREATE TABLE tbl_owners (
+    o_id INT PRIMARY KEY AUTO_INCREMENT,
+    f_name VARCHAR(60) NOT NULL,
+    l_name VARCHAR(60) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    u_id_fk INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_owner_user
+        FOREIGN KEY (u_id_fk)
+        REFERENCES tbl_user(u_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
+
+CREATE TABLE tbl_stations (
+    s_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(60) NOT NULL,
+    license varchar(30)not null unique,
+   	adress text not null,
+    city varchar(20) not null,
+    s_status varchar(20) not null,
+    o_id_fk INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_station_owner
+        FOREIGN KEY (o_id_fk)
+        REFERENCES tbl_owners(o_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE tbl_employees (
+    e_id INT PRIMARY KEY AUTO_INCREMENT,
+    f_name VARCHAR(60) NOT NULL,
+    l_name VARCHAR(60) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    e_status varchar(20) not null,
+    u_id_fk INT NOT NULL,
+    s_id_fk int not null,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_employee_user
+        FOREIGN KEY (u_id_fk)
+        REFERENCES tbl_user(u_id)
+        ON DELETE CASCADE,
+    CONSTRAINT FK_employee_station
+        FOREIGN KEY (s_id_fk)
+        REFERENCES tbl_stations(s_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+ 
